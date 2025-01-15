@@ -1,0 +1,25 @@
+#pragma once
+
+#include <iostream>
+#include <vector>	
+#include <unordered_map>
+#include <chrono>
+#include <functional>
+#include <stdlib.h>
+#include <crtdbg.h>
+#include <sstream>
+#include <unordered_set>
+#include <list>
+#include <set>
+#include <Windows.h>
+#include <string>
+#include <cstdlib>
+#include <filesystem>
+#include <fstream>
+#include "struct.h"
+#include "Macro.h"
+#include "Singleton.h"
+#include "define.h"
+#include "flag.h"
+#include "type.h"
+#include "Random.h"
