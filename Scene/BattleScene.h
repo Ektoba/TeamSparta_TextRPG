@@ -10,6 +10,10 @@ private:
 	class ConsoleRender* m_Render;
 	class Monster*       m_Monster;
 	class Player*        m_Player;
+	std::string			 m_ItemName;
+	float m_Time =0.f;
+	float m_TimeMax = 1.f;
+	bool m_bChangeFlag = false;
 public:
 	size_t GetCursorY(EBattleObjectType Obj);
 public:

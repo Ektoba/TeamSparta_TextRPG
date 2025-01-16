@@ -16,8 +16,8 @@ BossMonster::BossMonster(const std::string& name, int playerLevel, MonsterType m
 void BossMonster::updateStats(int playerLevel)
 {
     Monster::updateStats(playerLevel);
-    health = static_cast<int>(health * 1.5);
-    attackPower = static_cast<int>(attackPower * 1.5);
+    currhealth = static_cast<int>(currhealth * 3);
+    attackPower = static_cast<int>(attackPower * 3);
 }
 
 // ?뚮젅?댁뼱 怨듦꺽
@@ -27,7 +27,7 @@ void BossMonster::attack(Player& player)
 
     // ?뚮젅?댁뼱?먭쾶 湲곕낯 ?곕?吏 ?곸슜
     uint32 currHealth = player.getCurrHealth();
-    currHealth = (currHealth > attackPower) ? currHealth - attackPower : 0;
+    currHealth = (currHealth > (uint32)attackPower) ? currHealth - attackPower : 0;
     std::cout << player.getName() << " takes " << attackPower << " damage! Remaining health: " << currHealth << std::endl;
 
     // 50% ?뺣쪧濡??뱀닔 怨듦꺽 ?ㅽ뻾
@@ -47,7 +47,7 @@ void BossMonster::specialAttack(Player& player)
         std::cout << "Boss performs a special double attack!" << std::endl;
 
         uint32 currHealth = player.getCurrHealth();
-        currHealth = (currHealth > attackPower * 2) ? currHealth - attackPower * 2 : 0;
+        currHealth = (currHealth > static_cast<uint32>(attackPower * 2)) ? static_cast<uint32>(currHealth - attackPower * 2) : 0;
         std::cout << player.getName() << " takes " << attackPower * 2 << " damage! Remaining health: " << currHealth << std::endl;
     }
     else if (special == 1)

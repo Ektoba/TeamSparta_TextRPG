@@ -1,20 +1,26 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "PlayerStatusObject.h"
 #include "ConsoleObject.h"
 #include "../Player/Player.h"
 #include "ConsoleRender.h"
 PlayerStatusObject::PlayerStatusObject()
 {
-	m_CursorPos = {115, 5};
+	m_CursorPos = {115, 1};
+	m_TextColor = FOREGROUND_GREEN | FOREGROUND_INTENSITY;
 }
 
 void PlayerStatusObject::Update(float DeltaTime)
 {
 	m_vecText.clear();
-	m_vecText.push_back("ÀÌ¸§   : " + Player::GetInst()->getName());
-	m_vecText.push_back("·¹º§   : " + std::to_string(Player::GetInst()->getLevel()));
-	m_vecText.push_back("Ã¼·Â   : " + std::to_string(Player::GetInst()->getCurrHealth()) + "/" + std::to_string(Player::GetInst()->getMaxHealth()));
-	m_vecText.push_back("¼ÒÁö±Ý : " + std::to_string(Player::GetInst()->getGold()));
+	m_vecText.push_back(" ");
+	m_vecText.push_back(" ");
+	m_vecText.push_back("ì´ë¦„   : " + Player::GetInst()->getName());
+	m_vecText.push_back(" ");
+	m_vecText.push_back("ë ˆë²¨   : " + std::to_string(Player::GetInst()->getLevel()));
+	m_vecText.push_back(" ");
+	m_vecText.push_back("ì²´ë ¥   : " + std::to_string(Player::GetInst()->getCurrHealth()) + "/" + std::to_string(Player::GetInst()->getMaxHealth()));
+	m_vecText.push_back(" ");
+	m_vecText.push_back("ì†Œì§€ê¸ˆ : " + std::to_string(Player::GetInst()->getGold()));
 	ConsoleObject::Update(DeltaTime);
 }
 

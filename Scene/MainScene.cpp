@@ -2,16 +2,26 @@
 #include "MainScene.h"
 #include "ConsoleRender.h"
 #include "KeyMgr.h"
-#include "../Manager/BattleManager.h"
-#include "Orc.h"
+#include "BattleManager.h"
 #include "Player/Player.h"
+#include "Monster.h" 
+#include "Orc.h" 
+#include "Goblin.h"
+#include "Troll.h" 
+#include "Slime.h"
+#include "BossMonster.h"
+#include "MonsterScene.h"
+#include "FieldScene.h"
+#include "Random.h"
+#include "ShopScene.h"
+#include "InventoryScene.h"
 MainScene::~MainScene()
 {
 }
 
 void MainScene::Start()
 {
-	m_vecText.push_back("1. 사냥터");
+	m_vecText.push_back("1. 모험");
 	m_vecText.push_back("2. 상점");
 	m_vecText.push_back("3. 인벤토리");
 	m_vecText.push_back("4. 게임종료");
@@ -20,42 +30,64 @@ void MainScene::Start()
 
 void MainScene::Update(float DeltaTime)
 {
-	if (IS_TAB(KEY::W))
-	{
-		m_SelectMenu = m_SelectMenu > 1 ? m_SelectMenu - 1 : 1;
-	}
-	else if (IS_TAB(KEY::S))
-	{
-		int size = (int)m_vecText.size();
-		m_SelectMenu = m_SelectMenu < size ? m_SelectMenu + 1 : size;
-	}
-	else if (IS_TAB(KEY::SPACE))
-	{
-		switch ((EMainMenu)m_SelectMenu)
-		{
-		case EMainMenu::None:
-			break;
-		case EMainMenu::Field:
-		{
-			BattleManager::GetInst()->battle(std::make_unique<Orc>(Player::GetInst()->getLevel()));
-		}
-			break;
-		case EMainMenu::Store:
-			break;
-		case EMainMenu::Inventory:
-			break;
-		case EMainMenu::Exit:
-			break;
-		default:
-			break;
-		}
-	}
+    if (IS_TAB(KEY::W))
+    {
+        m_SelectMenu = m_SelectMenu > 1 ? m_SelectMenu - 1 : 1;
+    }
+    else if (IS_TAB(KEY::S))
+    {
+        uint32 size = (uint32)m_vecText.size();
+        m_SelectMenu = m_SelectMenu < size ? m_SelectMenu + 1 : size;
+    }
+    else if (IS_TAB(KEY::SPACE))
+    {
+        switch ((EMainMenu)m_SelectMenu)
+        {
+        case EMainMenu::None:
+            break;
+
+        case EMainMenu::Field: 
+        {
+            CursorPos pos = Player::GetInst()->getFieldPos();
+            ConsoleRender::GetInst()->CreateScene<FieldScene>();
+            
+            //Player* player = Player::GetInst();
+
+            //if (player->getLevel() >= 10)
+            //{
+            //    RandomCreateBossMonster();
+            //}
+            //else
+            //{
+            //    RandomCreateMonster();
+            //}
+        }
+        break;
+
+        case EMainMenu::Store:
+            ConsoleRender::GetInst()->CreateScene<ShopScene>();
+            break;
+
+        case EMainMenu::Inventory:
+            // 인벤토리 추가
+            ConsoleRender::GetInst()->CreateScene<InventoryScene>();
+            break;
+
+        case EMainMenu::Exit:
+            std::cout << "게임을 종료합니다!" << std::endl;
+            exit(0);
+            break;
+
+        default:
+            break;
+        }
+    }
 }
+
 
 void MainScene::Render(float DeltaTime)
 {
 	HANDLE handle = ConsoleRender::GetInst()->getHandle();
-	CKeyMgr::GetInst()->update(handle);
 	DWORD dw;
 	CursorPos Pos(3,0);
 
@@ -64,13 +96,15 @@ void MainScene::Render(float DeltaTime)
 	for (const auto& iter : m_vecText)
 	{
 		SetConsoleCursorPosition(handle, Pos);
-		WriteFile(handle, iter.c_str(), (DWORD)iter.size(), &dw, nullptr);
+        std::wstring str = toUnicode(iter.c_str());
+
+        WriteConsoleW(handle, str.c_str(), (DWORD)str.size(), &dw, nullptr);
 		Pos.Y++;
 	}
 	Pos.Y = 0;
 	Pos.X = 0;
 
-	Pos.Y += (DWORD)m_SelectMenu-1;
+    Pos.Y += (SHORT)(m_SelectMenu - 1);
 	SetConsoleCursorPosition(handle, Pos);
-	WriteFile(handle, ">", (DWORD)1, &dw, nullptr);
+    WriteConsoleW(handle, ">", (DWORD)1, &dw, nullptr);
 }

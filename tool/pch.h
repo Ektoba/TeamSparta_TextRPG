@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <iostream>
 #include <vector>	
@@ -23,3 +23,4 @@
 #include "flag.h"
 #include "type.h"
 #include "Random.h"
+#include "func.h"

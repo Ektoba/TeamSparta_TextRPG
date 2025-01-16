@@ -1,8 +1,9 @@
-#pragma once
+﻿#pragma once
 
 struct CursorPos : COORD
 {
 public:
+
 	CursorPos() noexcept{ X = 0; Y = 0; };
 
 	explicit CursorPos(SHORT _x, SHORT _y)
@@ -15,11 +16,11 @@ public:
 		this->X = F.X; 
 		this->Y = F.Y; 
 	}
-	explicit CursorPos(const CursorPos& Pos)
-	{
-		X += Pos.X;
-		Y += Pos.Y;
-	}
+	//explicit CursorPos(const CursorPos& Pos)
+	//{
+	//	X += Pos.X;
+	//	Y += Pos.Y;
+	//}
 	operator COORD() const { return CursorPos(*this); }
 public:
 	CursorPos operator+(const CursorPos& pos)

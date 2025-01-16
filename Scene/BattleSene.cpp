@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "BattleScene.h"
 #include "Logger.h"
 #include "Monster.h"
@@ -10,8 +10,9 @@
 #include "BattleMenuObject.h"
 #include "BattleMessage.h"
 #include "MonsterHPBar.h"
+#include "FieldScene.h"
 #include "../Manager/BattleManager.h"
-
+#include "MainScene.h"
 BattleScene::BattleScene() :
 	m_Monster(nullptr),
 	m_Player(nullptr),
@@ -38,19 +39,27 @@ void BattleScene::Start()
 	m_vecObject[(int)EBattleObjectType::Menu] = std::make_unique<BattleMenuObject>(this);
 	m_vecObject[(int)EBattleObjectType::Message] = std::make_unique<BattleMessage>(this);
 	m_vecObject[(int)EBattleObjectType::MonsterArt] = std::make_unique<MonsterArtObject>(this);
-	m_vecObject[(int)EBattleObjectType::MonsterArt]->SetImage(MonsterType::Dragon);
+	m_vecObject[(int)EBattleObjectType::MonsterArt]->SetMonster(m_Monster);
 	m_vecObject[(int)EBattleObjectType::MonsterHPBar] = std::make_unique<MonsterHPBar>(this);
 	m_vecObject[(int)EBattleObjectType::MonsterHPBar]->SetMonster(m_Monster);
-	m_vecObject[(int)EBattleObjectType::MonsterHPBar]->SetCursorPos(CursorPos(0, (DWORD)m_vecObject[(int)EBattleObjectType::MonsterArt]->GetCursorY()));
+	m_vecObject[(int)EBattleObjectType::MonsterHPBar]->SetCursorPos(CursorPos(0, (SHORT)m_vecObject[(uint32)EBattleObjectType::MonsterArt]->GetCursorY()));
 }
 void BattleScene::Update(float DeltaTime)
 {
+	if (m_bChangeFlag)
+		m_Time += DeltaTime;
+
+	if (m_Time >= m_TimeMax)
+	{
+		ConsoleRender::GetInst()->CreateScene<FieldScene>();
+		return;
+	}
+
 	size_t size = m_vecObject.size();
-	CKeyMgr::GetInst()->update(m_Render->getHandle());
 	m_Player->GetInst()->Update(DeltaTime);
 	for (const auto& iter : m_vecObject)
 	{
-		iter.get()->Update(DeltaTime);
+		iter->Update(DeltaTime);
 	}
 }
 void BattleScene::Render(float DeltaTime)
@@ -59,7 +68,7 @@ void BattleScene::Render(float DeltaTime)
 	m_Player->GetInst()->Render(DeltaTime);
 	for (const auto& iter : m_vecObject)
 	{
-		iter.get()->Render(DeltaTime);
+		iter->Render(DeltaTime);
 	}
 }
 
@@ -76,29 +85,34 @@ void BattleScene::Fight()
 	std::string MonsterName = m_Monster->getName();
 	std::string PlayerName = m_Player->getName();
 
-	Message->m_vecText.push_back(PlayerName + "°¡ °ø°ÝÇÕ´Ï´Ù.");
-	std::string str = MonsterName + "°¡ " + std::to_string(Player::GetInst()->getAtk()) + "ÀÇ ÇÇÇØ¸¦ ÀÔ½À´Ï´Ù.";
+	Message->m_vecText.push_back(PlayerName + "ê°€ ê³µê²©í•©ë‹ˆë‹¤.");
+	std::string str = MonsterName + "ê°€ " + std::to_string(Player::GetInst()->getAtk()) + "ì˜ í”¼í•´ë¥¼ ìž…ìŠµë‹ˆë‹¤.";
 	Message->m_vecText.push_back(str);
 	m_Monster->takeDamage(Player::GetInst()->getAtk());
-
-	//// TODO : ÀÏÁ¤ ½Ã°£ ÀÌÈÄ ¸Þ½ÃÁö¸¦ ÃÊ±âÈ­ÇÏ°í Ãß°¡ÇÏ´Â ±â´ÉÀÌ ÀÖÀ¸¸é ÁÁ°Ú´Ù.
-	Message->m_vecText.push_back(MonsterName + "°¡ °ø°ÝÇÕ´Ï´Ù.");
-	str = PlayerName + "°¡ " + std::to_string(m_Monster->getAttackPower()) + "ÀÇ ÇÇÇØ¸¦ ÀÔ½À´Ï´Ù.";
+	if (m_Monster->isDead())
+	{
+		Message->m_vecText.push_back("ëª¬ìŠ¤í„°ê°€ ì£½ì—ˆìŠµë‹ˆë‹¤.");
+		m_bChangeFlag = true;
+		return;
+	}
+	Message->m_vecText.push_back(MonsterName + "ê°€ ê³µê²©í•©ë‹ˆë‹¤.");
+	str = PlayerName + "ê°€ " + std::to_string(m_Monster->getAttackPower()) + "ì˜ í”¼í•´ë¥¼ ìž…ìŠµë‹ˆë‹¤.";
 	Message->m_vecText.push_back(str);
 	Player::GetInst()->takeDamage(m_Monster->getAttackPower());
 	Message->m_Timer = true;
-
-	if (m_Player->getCurrHealth() <= 0 || m_Monster->getHealth() <= 0)
+	if (m_Player->getCurrHealth() <= 0)
 	{
-		BattleManager::GetInst()->BattleEnd();
+		Message->m_vecText.push_back("í”Œë ˆì´ì–´ê°€ ì£½ì—ˆìŠµë‹ˆë‹¤.");
+		Player::GetInst()->Destroy();
 	}
 }
 
 void BattleScene::useItem()
 {
+	Player::GetInst()->useItem(m_ItemName);
 }
 
 void BattleScene::runAway()
 {
-	BattleManager::GetInst()->BattleEnd();
+	ConsoleRender::GetInst()->CreateScene<FieldScene>();
 }

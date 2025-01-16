@@ -1,4 +1,4 @@
-#include <pch.h>
+ï»¿#include <pch.h>
 #include "KeyMgr.h"
 int g_iVK[(unsigned int)KEY::KEY_END] =
 {
@@ -87,10 +87,10 @@ void CKeyMgr::update(HANDLE Handle)
 	{
 		for (UINT i = 0; i < (UINT)KEY::KEY_END; ++i)
 		{
-			// Å°°¡ ´­·ÁÀÖ´Ù
+			// Å°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½
 			if (GetAsyncKeyState(g_iVK[i]) & 0x8000)
 			{
-				// ÀÌÀü¿£ ´­¸°ÀûÀÌ ¾ø´Ù.
+				// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
 				if (false == m_vecKey[i].bPrevCheck)
 				{
 					m_vecKey[i].eState = KEY_STATE::TAP;
@@ -103,10 +103,10 @@ void CKeyMgr::update(HANDLE Handle)
 				m_vecKey[i].bPrevCheck = true;
 			}
 
-			// Å°°¡ ¾È´­·ÁÀÖ´Ù.
+			// Å°ï¿½ï¿½ ï¿½È´ï¿½ï¿½ï¿½ï¿½Ö´ï¿½.
 			else
 			{
-				// ÀÌÀü¿£ ´­·ÁÀÖ¾ú´Ù.
+				// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½.
 				if (KEY_STATE::TAP == m_vecKey[i].eState
 					|| KEY_STATE::PRESSED == m_vecKey[i].eState)
 				{
@@ -122,7 +122,7 @@ void CKeyMgr::update(HANDLE Handle)
 		}
 	}
 		
-	// À©µµ¿ì°¡ Æ÷Ä¿½Ì µÇ¾îÀÖÁö ¾Ê´Ù.
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ì°¡ ï¿½ï¿½Ä¿ï¿½ï¿½ ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´ï¿½.
 	else
 	{
 		for (UINT i = 0; i < (UINT)KEY::KEY_END; ++i)

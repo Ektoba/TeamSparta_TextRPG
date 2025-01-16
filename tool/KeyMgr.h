@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 enum class KEY
 {
@@ -75,17 +75,17 @@ enum class KEY
 
 enum class KEY_STATE
 {
-	TAP,		// ¸· ´­¸²
-	PRESSED,	// TAP ÀÌÈÄ¿¡µµ °è¼Ó ´­·ÁÀÖÀ½
-	AWAY,		// ¸· ¶¾ »óÈ²
-	NONE,		// ¾È´­¸° »óÅÂ
+	TAP,		// ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	PRESSED,	// TAP ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	AWAY,		// ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½È²
+	NONE,		// ï¿½È´ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 };
 
 
 struct tKeyInfo
 {	
-	KEY_STATE	eState;		// ÇöÀç Å° »óÅÂ
-	bool		bPrevCheck;	// ÀÌÀü ÇÁ·¹ÀÓ¿¡¼­ Å°°¡ ´­·È´ÂÁö Ã¼Å©
+	KEY_STATE	eState;		// ï¿½ï¿½ï¿½ï¿½ Å° ï¿½ï¿½ï¿½ï¿½
+	bool		bPrevCheck;	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ó¿ï¿½ï¿½ï¿½ Å°ï¿½ï¿½ ï¿½ï¿½ï¿½È´ï¿½ï¿½ï¿½ Ã¼Å©
 };
 
 class CKeyMgr : public Singleton<CKeyMgr>

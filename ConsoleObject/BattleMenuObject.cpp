@@ -1,19 +1,20 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "BattleMenuObject.h"
 #include "ConsoleRender.h"
 #include "KeyMgr.h"
 #include "BattleScene.h"
+
 BattleMenuObject::BattleMenuObject(class Scene* Scene) :
 	ConsoleObject(Scene)
 {
 	m_Render = ConsoleRender::GetInst();
 	m_SelectMenu = 1;
 
-	m_vecText.push_back("** 1. ½Î¿î´Ù.");
-	m_vecText.push_back("** 2. ¾ÆÀÌÅÛ »ç¿ë.");
-	m_vecText.push_back("** 3. µµ¸Á°£´Ù.");
+	m_vecText.push_back("** 1. ì‹¸ìš´ë‹¤.");
+	m_vecText.push_back("** 2. ì•„ì´í…œì‚¬ìš©.");
+	m_vecText.push_back("** 3. ë„ë§ê°„ë‹¤.");
 
-	m_CursorPos = { 93, 30 };
+	m_CursorPos = { 98, 30 };
 	m_maxTime = 1.f;
 }
 void BattleMenuObject::Update(float DeltaTime)
@@ -29,7 +30,7 @@ void BattleMenuObject::Update(float DeltaTime)
 		size_t size = (int)m_vecText.size();
 		m_SelectMenu = m_SelectMenu < size ? m_SelectMenu +1 : size;
 	}
-	if (IS_AWAY(KEY::SPACE))
+	if (IS_TAB(KEY::SPACE))
 	{
 		BattleScene* Scene = dynamic_cast<BattleScene*>(m_Owner);
 
@@ -56,7 +57,7 @@ void BattleMenuObject::Render(float DeltaTime)
 {
 	ConsoleObject::Render(DeltaTime);
 	m_Render->SetTextColorAndBackGroundColor(FOREGROUND_GREEN | FOREGROUND_INTENSITY, m_BackGroundColor);
-	SetConsoleCursorPosition(m_hConsole, CursorPos(m_CursorPos.X-3,m_CursorPos.Y + m_SelectMenu -1));
+	SetConsoleCursorPosition(m_hConsole, CursorPos(m_CursorPos.X-1,m_CursorPos.Y + m_SelectMenu -1));
 	WriteFile(m_hConsole, ">", (DWORD)1, nullptr, NULL);
 	m_Render->SetTextColorAndBackGroundColor(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }

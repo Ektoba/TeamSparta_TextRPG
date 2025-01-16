@@ -7,28 +7,27 @@
 
 Shop::Shop()
 {
-	items.emplace_back(std::make_unique<AttackBoost>);
-	items.emplace_back(std::make_unique<HealthPotion>);
+	items["힘의 영약"] = std::make_shared<AttackBoost>();
+	items["체력 포션"] = std::make_shared<HealthPotion>();
+	m_MessageObj = std::make_unique<ShopMessage>();
 }
 
-void Shop::displayItems() const
+Shop::~Shop()
 {
-	std::cout << "====================" << std::endl;
-	std::cout << "─███─█──█─████─████─" << std::endl;
-	std::cout << "─█───█──█─█──█─█──█─" << std::endl;
-	std::cout << "─███─████─█──█─████─" << std::endl;
-	std::cout << "───█─█──█─█──█─█────" << std::endl;
-	std::cout << "─███─█──█─████─█────" << std::endl;
-	std::cout << "====================" << std::endl;
-	
-	// 상점 아이템 목록 출력
-	for (int i = 0; i < items.size(); i++)
-	{
-		std::cout << i + 1 << ". " << items[i]->getName() << std::endl;
-	}
+	items.clear();
 }
 
-void Shop::buyItem(int index, Player* player)
+void Shop::Update(float DeltaTime)
+{
+	m_MessageObj->Update(DeltaTime);
+}
+
+void Shop::Render(float DeltaTime)
+{
+	m_MessageObj->Render(DeltaTime);
+}
+
+void Shop::buyItem(const std::string& ItemName, Player* player)
 {
 	// player 유효성 검사
 	if (player == nullptr)
@@ -37,74 +36,70 @@ void Shop::buyItem(int index, Player* player)
 	}
 
 	// index 유효성 검사
-	if (index <= 0 || index >= items.size())
+	if (items[ItemName].get() == nullptr)
 	{
-		std::cerr << "구매할 아이템이 존재하지 않습니다." << std::endl;
+		m_MessageObj->m_listText.push_back("구매할 아이템이 존재하지 않습니다..");
 		return;
 	}
 
-	// 구매한 아이템
-	std::unique_ptr<Item> BuyItem = std::move(items[index - 1]);
-	uint32 BuyPrice = BuyItem->getPrice();
-	
+	// 구매할 아이템 정보
+	std::shared_ptr<Item> BuyItem = items[ItemName];
+	int32 BuyPrice = BuyItem->getPrice();
+
 	// player의 소지 골드 검사
 	if (player->getGold() >= BuyPrice)
 	{
 		// player 아이템 목록에 구매한 아이템 추가
-		player->addItem(std::move(BuyItem));
+		player->addItem(BuyItem);
 
 		// 상점 아이템 목록에서 구매한 아이템 제거
-		items.erase(items.begin() + index - 1);
+		items.erase(items.find(ItemName));
 
-		std::cout << BuyItem->getName() << " 구매 완료!" << std::endl;
-
+		m_MessageObj->m_listText.push_back("구매완료.");
 		// player 골드 감소
 		player->addGold(-BuyPrice);
 	}
-	else 
+	else
 	{
-		std::cout << "골드가 부족합니다." << std::endl;
+		m_MessageObj->m_listText.push_back("골드가 부족합니다.");
 		return;
 	}
 }
 
-void Shop::sellItem(int index, Player* player)
+void Shop::sellItem(const std::string& ItemName, Player* player)
 {
 	// player 유효성 검사
 	if (player == nullptr)
 	{
 		return;
 	}
-
+	auto item = player->getItem(ItemName);
 	// index 유효성 검사
-	if (index <= 0 || index >= player->getVecItem().size())
+	if (item == nullptr)
 	{
-		std::cerr << "판매할 아이템이 존재하지 않습니다." << std::endl;
+		m_MessageObj->m_listText.push_back("판매할 아이템이 존재하지 않습니다..");
 		return;
 	}
+	uint32 SellPrice = item->getPrice() * 0.6;
 
-	// 판매할 아이템
-	std::unique_ptr<Item> SellItem = std::move(player->getVecItem()[index - 1]);
-	uint32 SellPrice = SellItem->getPrice() * 0.6;
-	
-	
 	// 판매 여부 확인
-	std::cout << SellItem->getName() << "을(를) 판매합니다. [y/n]" << std::endl;
-	char answer;
-	std::cin >> answer;
-	if (answer == 'y' || answer == 'Y')
-	{
-		// player 아이템 목록에서 판매한 아이템 제거
-		player->removeItem(index - 1);
+	m_MessageObj->m_listText.push_back(item->getName() + "을(를) 판매합니다.]");
+	// player 아이템 목록에서 판매한 아이템 제거
+	player->removeItem(item);
+	// player 골드 증가
+	player->addGold(SellPrice);
+}
 
-		std::cout << "판매 완료!" << std::endl;
+std::vector<std::shared_ptr<Item>> Shop::getItems()
+{
+	std::vector<std::shared_ptr<Item>> vecItem;
 
-		// player 골드 증가
-		player->addGold(SellPrice);
-	}
-	else
+	auto iter = items.begin();
+	auto iter_end = items.end();
+
+	for (; iter != iter_end ; ++iter)
 	{
-		std::cout << "판매를 취소했습니다." << std::endl;
-		return;
+		vecItem.push_back(iter->second);
 	}
+	return vecItem;
 }

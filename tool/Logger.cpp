@@ -1,8 +1,8 @@
-#include "Logger.h"
+ï»¿#include "Logger.h"
 #include <mutex>
 CLogger::CLogger()
 {
-	m_LogFile.open("log.txt", std::ios::app); // ·Î±× ÆÄÀÏ ¿­±â (append ¸ðµå)
+	m_LogFile.open("log.txt", std::ios::app); // ï¿½Î±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (append ï¿½ï¿½ï¿½)
 	if (!m_LogFile.is_open()) throw std::runtime_error("Unable to open log file.");
 }
 

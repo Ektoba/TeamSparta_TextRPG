@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #include "ConsoleRender.h"
 #include "ConsoleObject.h"
+#include "KeyMgr.h"
 #include "Scene.h"
 ConsoleRender::ConsoleRender() :
     m_Console{},
@@ -23,13 +24,14 @@ bool ConsoleRender::Init()
 
 void ConsoleRender::Update(float DeltaTime)
 {
-    m_Scene.get()->Update(DeltaTime);
+    m_Scene->Update(DeltaTime);
+    CKeyMgr::GetInst()->update(getHandle());
 }
 
 void ConsoleRender::Render(float DeltaTime)
 {
     ScreenClear();
-    m_Scene.get()->Render(DeltaTime);
+    m_Scene->Render(DeltaTime);
     ScreenFlipping();
 }
 
@@ -51,6 +53,7 @@ std::string ConsoleRender::InputText(const std::string& text)
         std::cerr << "Error: Invalid console handle." << std::endl;
         return "Error: Invalid console handle.";
     }
+
     configureConsoleForRawInput(hInput);
 
     char inputBuffer[1024] = {};
@@ -132,16 +135,23 @@ void ConsoleRender::ScreenInit()
     CONSOLE_CURSOR_INFO consoleCursor{ 1, FALSE };  // �ܼ��� Ŀ�� �������?�����մϴ�.
     CONSOLE_SCREEN_BUFFER_INFO consoleInfo{};
     GetConsoleScreenBufferInfo(m_Console.hConsole, &consoleInfo);
-    consoleInfo.dwSize.X = 1440;                   
-    consoleInfo.dwSize.Y = 1024;                    
-
+    consoleInfo.dwSize.X = ConsoleWidth;                   
+    consoleInfo.dwSize.Y = ConsoleHeight;                    
+    consoleInfo.srWindow.Right = consoleInfo.dwSize.X - 1;
+    consoleInfo.srWindow.Bottom = consoleInfo.dwSize.Y - 1;
     m_Console.rtConsole.nWidth = consoleInfo.srWindow.Right - consoleInfo.srWindow.Left;
     m_Console.rtConsole.nHeight = consoleInfo.srWindow.Bottom - consoleInfo.srWindow.Top;
 
+    SetConsoleScreenBufferSize(m_Console.hInput, consoleInfo.dwSize);
+    SetConsoleWindowInfo(m_Console.hInput, TRUE, &consoleInfo.srWindow);
+
+    SetConsoleScreenBufferSize(m_Console.hConsole, consoleInfo.dwSize);
+    SetConsoleWindowInfo(m_Console.hConsole, TRUE, &consoleInfo.srWindow);
+
     m_Console.hBuffer[0] = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
-    SetConsoleScreenBufferSize(m_Console.hBuffer[0], consoleInfo.dwSize);    // ȭ�� ���� ũ�� ����
-    SetConsoleWindowInfo(m_Console.hBuffer[0], TRUE, &consoleInfo.srWindow); // �ܼ� ����
-    SetConsoleCursorInfo(m_Console.hBuffer[0], &consoleCursor);              // �ܼ��� Ŀ�� ����
+    SetConsoleScreenBufferSize(m_Console.hBuffer[0], consoleInfo.dwSize);    
+    SetConsoleWindowInfo(m_Console.hBuffer[0], TRUE, &consoleInfo.srWindow); 
+    SetConsoleCursorInfo(m_Console.hBuffer[0], &consoleCursor);              
 
     m_Console.hBuffer[1] = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
     SetConsoleScreenBufferSize(m_Console.hBuffer[1], consoleInfo.dwSize);
@@ -222,11 +232,25 @@ void ConsoleRender::ScreenPrintln(const std::string& str)
     WriteFile(m_Console.hBuffer[m_Console.nBufferIdx], result.c_str(), (DWORD)result.size(), &dw, NULL);
 }
 
-void ConsoleRender::ChangeScene(std::unique_ptr<class Scene> Scene)
+void ConsoleRender::CreateScene(std::unique_ptr<class Scene> Scene)
 {
-    if (m_Scene.get() != nullptr)
-        m_Scene.reset();
+    if (m_NextScene.get())
+        m_NextScene.reset();
 
-    m_Scene = std::move(Scene);
-    m_Scene->Start();
+    m_NextScene = std::move(Scene);
+    m_NextScene->Start();
+    m_ChangeFlag = true;
+}
+
+bool ConsoleRender::ChangeScene()
+{
+    if (m_NextScene.get())
+    {
+        if(m_Scene.get())
+            m_Scene.reset();
+
+        m_Scene = std::move(m_NextScene);
+        return true;
+    }
+    return false;
 }

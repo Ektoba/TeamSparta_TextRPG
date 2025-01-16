@@ -10,8 +10,6 @@ public:
 public:
 	bool init();
 	bool init(class ConsoleRender* Render);
-	void run();
-	void BattleEnd() { m_battleEnd = true; }
 private:
 	void Update(float DeltaTime);
 	void Render(float DeltaTime);
@@ -23,6 +21,8 @@ private:
 	class ConsoleRender* m_Render;
 	class BattleScene* m_RenderObj;
 	bool m_battleEnd = false;
+	float m_CurrentTime = 0.f;
+	float m_MaxTime = 0.8f;
 public:
 	void battle(Monster* Monster);
 	void battle(std::unique_ptr<class Monster> Monster);

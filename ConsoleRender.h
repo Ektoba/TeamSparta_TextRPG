@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "Singleton.h"
-
+#include "Scene.h"
 class ConsoleRender : public Singleton<ConsoleRender>
 {
 	friend class GameManager;
@@ -45,6 +45,8 @@ private:
 	CONSOLE_CURSOR_INFO                                m_cci = {};
 	COORD                                              m_Pos = {};
 	std::unique_ptr<class Scene>                       m_Scene;
+	std::unique_ptr<class Scene>                       m_NextScene;
+	bool                                               m_ChangeFlag=false;
 public:
 	void configureConsoleForRawInput(HANDLE hInput);
 	class Scene* GetScene() const;
@@ -55,6 +57,17 @@ private:
 	void ScreenPrint(const std::string& str);
 	void ScreenPrintln(const std::string& str);
 public:
-	void ChangeScene(std::unique_ptr<class Scene> Scene);
+	void CreateScene(std::unique_ptr<class Scene> Scene);
+	bool ChangeScene();
+	template <typename T>
+	void CreateScene()
+	{
+		if (m_NextScene.get())
+			m_NextScene.reset();
+
+		m_NextScene = std::make_unique<T>();
+		m_NextScene->Start();
+		m_ChangeFlag = true;
+	}
 };
 

@@ -1,10 +1,11 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "PlayerProfile.h"
 
 PlayerProfile::PlayerProfile()
 {
 	m_CursorPos = { 90, 0 };
-	SetImage(m_vecText,"Profile.txt");
+	m_TextColor = FOREGROUND_GREEN | FOREGROUND_INTENSITY;
+	SetImage(m_vecText,"Profile");
 }
 
 void PlayerProfile::Update(float DeltaTime)

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 enum class EMainMenu : unsigned char
 {
 	None,
@@ -34,13 +34,15 @@ enum class EStoreType : char
 	Max
 };
 
-// MonsterType Á¤ÀÇ
-enum class MonsterType : int {  // unsigned char ¡æ int·Î º¯°æ
+// MonsterType ï¿½ï¿½ï¿½ï¿½
+enum class MonsterType : int {  // unsigned char ï¿½ï¿½ intï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	None = -1,
 	Goblin,
 	Orc,
 	Troll,
-	Dragon
+	Slime,
+	Dragon,
+	Max
 };
 enum class EBattleObjectType : unsigned char
 {
@@ -48,5 +50,12 @@ enum class EBattleObjectType : unsigned char
 	Message,
 	MonsterArt,
 	MonsterHPBar,
+	Max
+};
+enum class EStageType : unsigned char
+{
+	Cpp,
+	BluePrint,
+	Unrea,
 	Max
 };

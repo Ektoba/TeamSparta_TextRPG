@@ -1,0 +1,10 @@
+root = true
+[*]
+charset = utf-8
+
+using System.Runtime.CompilerServices;
+using System.Text;
+
+string MyPath([CallerFilePath] string val = "") => val;
+
+Console.WriteLine(File.ReadAllText(MyPath(), Encoding.UTF8));

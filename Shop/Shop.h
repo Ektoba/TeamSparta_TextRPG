@@ -2,19 +2,22 @@
 #include "../Manager/GameManager.h"
 #include "../Player/Player.h"
 #include "../Item/Item.h"
-
+#include "ShopMessage.h"
 class Shop
 {
 private:
-	std::vector<std::unique_ptr<Item>> items;
+	std::unordered_map<std::string, std::shared_ptr<Item>> items;
 
 public:
 	Shop();
-	~Shop() = default;
-
+	~Shop();
 public:
-	void displayItems() const;
-	void buyItem(int index, Player* player);
-	void sellItem(int index, Player* player);
+	void Update(float DeltaTime);
+	void Render(float DeltaTime);
+public:
+	void buyItem(const std::string& ItemName, Player* player);
+	void sellItem(const std::string& Itemname, Player* player);
+	std::vector<std::shared_ptr<Item>> getItems();
+	std::unique_ptr<ShopMessage> m_MessageObj;
 };
 

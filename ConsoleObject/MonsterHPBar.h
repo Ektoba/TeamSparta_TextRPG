@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "ConsoleObject.h"
 class MonsterHPBar :
     public ConsoleObject
@@ -10,5 +10,8 @@ public:
     virtual void Render(float DeltaTime);
 public:
     void SetCursorPosY(const int& y);
+    float m_Frac;
+    uint32 m_progress;
+    uint32 m_BarCount;
 };
 

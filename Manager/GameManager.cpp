@@ -2,14 +2,13 @@
 #include "Logger.h"
 #include "GameManager.h"
 #include "BattleManager.h"
-#include "StoreManager.h"
 #include "TimeManager.h"
 #include "ConsoleRender.h"
 #include "Player/Player.h"
 #include "Monster.h"
 #include "Goblin.h"
 #include "KeyMgr.h"
-#include "MainScene.h"
+#include "TitleScene.h"
 GameManager::GameManager() : 
 	m_GameEnd(false),
 	m_BattleManager(nullptr),
@@ -18,7 +17,6 @@ GameManager::GameManager() :
 	m_ConsoleRender(nullptr)
 {
 	m_BattleManager = BattleManager::GetInst();
-	//m_StoreManager = StoreManager::GetInst();
 	m_Player = Player::GetInst();
 	m_ConsoleRender = ConsoleRender::GetInst();
 }
@@ -50,7 +48,7 @@ bool GameManager::init()
 		return false;
 	}
 
-	m_ConsoleRender->ChangeScene(std::make_unique<MainScene>());
+	m_ConsoleRender->CreateScene(std::make_unique<TitleScene>());
 	return true;
 }
 
@@ -70,7 +68,11 @@ void GameManager::GameEnd()
 
 void GameManager::Cicle()
 {
+	if (ConsoleRender::GetInst()->m_ChangeFlag)
+		ConsoleRender::GetInst()->ChangeScene();
+
 	float DeltaTime = CTimeManager::GetInst()->GetDeltaTime();
+
 	Update(DeltaTime);
 	Render(DeltaTime);
 }

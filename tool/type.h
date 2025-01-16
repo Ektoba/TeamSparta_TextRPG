@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 using uchar8 = unsigned char;
 using char8 = char;

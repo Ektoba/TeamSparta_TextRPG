@@ -6,6 +6,7 @@
 #include "KeyMgr.h"
 #include "ConsoleRender.h"
 #include "TimeManager.h"
+#include "MainScene.h"
 BattleManager::BattleManager() : 
     m_Player(nullptr),
     m_Monster(nullptr),
@@ -42,16 +43,6 @@ bool BattleManager::init(ConsoleRender* Render)
     m_Render = Render;
     return true;
 }
-void BattleManager::run()
-{
-    while (!m_battleEnd)
-    {
-        float DeltaTime = CTimeManager::GetInst()->GetDeltaTime();
-
-        Update(DeltaTime);
-        Render(DeltaTime);
-    }
-}
 
 void BattleManager::Update(float DeltaTime)
 {
@@ -68,8 +59,7 @@ void BattleManager::battle(Monster* Monter)
     Monter->updateStats(m_Player->m_level);
     auto ptr = std::make_unique<BattleScene>(Monter);
     ptr->SetMonster(Monter);
-    ConsoleRender::GetInst()->ChangeScene(std::move(ptr));
-    run();
+    ConsoleRender::GetInst()->CreateScene(std::move(ptr));
 }
 
 void BattleManager::battle(std::unique_ptr<class Monster> Monster)

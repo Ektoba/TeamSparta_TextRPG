@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "ConsoleObject.h"
 class PlayerProfile :
     public ConsoleObject

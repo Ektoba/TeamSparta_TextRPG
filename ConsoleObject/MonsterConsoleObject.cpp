@@ -8,7 +8,8 @@ MonsterConsoleObject::MonsterConsoleObject(ConsoleRender* Render, Monster* monst
 MonsterConsoleObject::~MonsterConsoleObject() {
 }
 
-void MonsterConsoleObject::update(HANDLE hConsole) {
+void MonsterConsoleObject::update(HANDLE hConsole) 
+{
     if (m_Monster->getHealth() > 0) {
         m_Monster->takeDamage(10);
     }
