@@ -23,6 +23,7 @@
     <ClCompile Include="ConsoleObject\BattleMessage.cpp" />
     <ClCompile Include="ConsoleObject\ConsoleObject.cpp" />
     <ClCompile Include="ConsoleObject\DisplayItems.cpp" />
+    <ClCompile Include="ConsoleObject\MainViwer.cpp" />
     <ClCompile Include="ConsoleObject\MonsterArtObject.cpp" />
     <ClCompile Include="ConsoleObject\MonsterConsoleObject.cpp" />
     <ClCompile Include="ConsoleObject\MonsterHPBar.cpp" />
@@ -110,6 +111,7 @@
     <ClInclude Include="ConsoleObject\BattleMessage.h" />
     <ClInclude Include="ConsoleObject\ConsoleObject.h" />
     <ClInclude Include="ConsoleObject\DisplayItems.h" />
+    <ClInclude Include="ConsoleObject\MainViwer.h" />
     <ClInclude Include="ConsoleObject\MonsterArtObject.h" />
     <ClInclude Include="ConsoleObject\MonsterConsoleObject.h" />
     <ClInclude Include="ConsoleObject\MonsterHPBar.h" />

@@ -205,6 +205,9 @@
     <ClCompile Include="ConsoleObject\ShopMessage.cpp">
       <Filter>Game\Scene\Shop</Filter>
     </ClCompile>
+    <ClCompile Include="ConsoleObject\MainViwer.cpp">
+      <Filter>Game\Scene\MainScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tool\TimeManager.h">
@@ -365,6 +368,9 @@
     </ClInclude>
     <ClInclude Include="Shop\Shop.h">
       <Filter>Game\Scene\Shop</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleObject\MainViwer.h">
+      <Filter>Game\Scene\MainScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
