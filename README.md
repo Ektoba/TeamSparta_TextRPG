@@ -37,14 +37,20 @@ C++의 첫번째 조각을 완성
 플레이어는 레벨 10이 되면 버그의 왕과 만나게 되고 최종 결전
 
 버그의 왕 처치 후-> 시간 균열이 봉합되고 정상적인 코딩세계 & 플레이어는 코딩의 수호자라는 타이틀 얻음
+
 -Title-
 ![image](https://github.com/user-attachments/assets/9f9483ba-489f-48ca-af27-c0b536670d2c)
+
 -main-
+
 ![image](https://github.com/user-attachments/assets/35c9fcde-ada0-448c-8028-c56104cc9a08)
+
 -travel-
 ![image](https://github.com/user-attachments/assets/500e9e1d-1abb-49dd-903a-3f92cfac36a7)
+
 -battle-
 ![image](https://github.com/user-attachments/assets/5f5b2100-ec47-4974-8f5c-96a56441aaa1)
+
 -shop-
 ![image](https://github.com/user-attachments/assets/7df99123-dd7a-41a4-a173-74dbd85d9793)
 
